@@ -1,0 +1,57 @@
+*{
+	margin:0px;
+	padding:0px;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-ms-box-sizing:border-box;
+	-ms-box-sizing:border-box;
+	box-sizing:border-box;
+}
+// Google Font Include Here
+
+@import url('https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700');
+
+// Body Default Scss Include Here
+
+body{
+	font-size:$body-size;
+	font-family:$body-family;
+	font-weight:400;
+	color:$body-color;
+	line-height:25px;
+}
+h1, h2, h3, h4, h5, h6{
+	font-family:$heading-family;
+	font-weight:700;
+	color:$heading-color;
+	margin:0px;
+}
+h1{
+	font-size:$heading-one;
+}
+h2{
+	font-size:$heading-two;
+}
+h3{
+	font-size:$heading-three;
+}
+h4{
+	font-size:$heading-four;
+}
+h5{
+	font-size:$heading-five;
+}
+h6{
+	font-size:$heading-six;
+}
+p{
+	font-size:$body-size;
+	font-family:$body-family;
+	font-weight:400;
+	color:$body-color;
+	line-height:25px;
+	margin:0px;
+}
+.clear{
+	clear:$clear;
+}

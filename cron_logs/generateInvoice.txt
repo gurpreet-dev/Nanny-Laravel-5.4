@@ -1,0 +1,6 @@
+
+In generateInvoice.php line 83:
+                                               
+  Cannot use object of type stdClass as array  
+                                               
+

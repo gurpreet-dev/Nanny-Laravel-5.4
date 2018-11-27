@@ -1,0 +1,173 @@
+<?php
+
+namespace App\Console\Commands;
+use App\User;
+use Illuminate\Console\Command;
+
+use App\Review;
+use App\Order;
+use App\Invoice;
+use App\Price;
+use App\Config;
+
+use DB;
+
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
+
+class generateInvoice extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'invoice:generateInvoice';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Generate invoice after 15 days for nanny booking';
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function handle()
+    {
+
+        /*********  Generate Invoice   **********/
+
+        $orders = Order::with(['last_invoice', 'attendence', 'nanny', 'user', 'request', 'services' => function($query){
+            $query->with(['service']);
+        }])->where('status', '1')->get();
+        
+        $current_date = date('d-m-Y');
+
+        $orders = json_decode(json_encode($orders), true);
+
+        foreach($orders as $order){
+
+            /********  Calculation Price per hour  **********/
+
+            $price_per_hour = 0;
+
+            foreach($order['services'] as $service){
+
+                $prices = Price::with(['child_prices' => function($query) use ($order){
+                    $query->where('child', $order['request']['childs'])->first();
+                }])->where(['service_id' => $service['service']['id'], 'type' => $order['request']['type']])->first();
+
+                $prices = json_decode(json_encode($prices), true);
+
+                $price_per_hour = $price_per_hour + $prices['child_prices'][0]['price'];
+
+            }
+
+            /*************************************************/
+
+
+
+            if(!empty($order['last_invoice'])){
+     
+                $last_date =  strtotime($order['last_invoice']['created_at']);  // if today :2013-05-23
+
+                $date = date('d-m-Y', strtotime('+15 days', $last_date));
+
+            }else{
+
+                $last_date = strtotime($order['start_date']);
+
+                $date = date('d-m-Y',strtotime('+15 days', $last_date));
+
+            }
+             
+
+            if($current_date == $date){
+
+                if(!empty($order['attendence'])){
+
+                    $price = 0;
+                    $total_hours    =   0;
+
+                    foreach($order['attendence'] as $attendence){
+
+                        if(strtotime($attendence['start_time']) < strtotime($date) && strtotime($attendence['start_time']) > $last_date){
+
+                            if($attendence['end_time'] != ''){
+                                $start_time = strtotime($attendence['start_time']);
+                                $end_time = strtotime($attendence['end_time']);
+                                //$minutes = round(abs($end_time - $start_time) / 60,2);
+                                $hours = round(abs($end_time - $start_time) / 3600,2);
+                                $price = $price + ($hours * $price_per_hour);
+
+                                $total_hours = $total_hours + $hours;
+                            }
+
+                        }        
+                    }
+                    
+                    $invoice = [
+                        'order_id'      =>  $order['id'],
+                        'user_id'      =>  $order['user_id'],
+                        'time'          =>  $total_hours,
+                        'price_per_hour'          =>  $price_per_hour,
+                        'price'         =>  $price,
+                        'created_at'    =>  \Carbon\Carbon::now()->toDateTimeString()
+                    ];
+
+                    $insert_id = Invoice::create($invoice)->id;
+
+                    if($insert_id){
+
+                        Order::where('id', $order['id'])->update(['last_invoice' => $insert_id, 'updated_at'   =>  \Carbon\Carbon::now()->toDateTimeString()]);
+
+                        $invoice = Invoice::where('id', $insert_id)->first();
+
+                        $data = array();
+
+                        $logo = URL::to('/').'/images/website/logo.png';
+
+                        Mail::send('emails.new_invoice_alert', ['url' => $logo, 'order' => $order, 'invoice' => $invoice], function ($message) use($order)
+                        {
+                            $message->to($order['user']['email'], $order['user']['first_name1'])->subject('New Request arrived');
+                            $message->from('kuldeepjha@avainfotech.com','Nanny Portland');
+                        
+                        });
+
+                        /**************/    
+
+                        $message = 'New invoice has been generated for your booking ID: '.$order['id'].'. Please check all invoice details by logging into to your account.';
+
+                        Config::sms($order['user']['mobile1'], $message); // sms to user
+                        Config::sms(User::admin('mobile'), 'New invoice has been generated for your booking ID: '.$order['id']); // sms to admin
+
+                        /**************/
+
+                    }
+
+                }    
+
+            }
+        
+        }
+
+
+        /****************************/
+
+        
+    }
+}

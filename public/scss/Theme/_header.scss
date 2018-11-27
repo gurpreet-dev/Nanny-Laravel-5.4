@@ -1,0 +1,128 @@
+// Header Scss Include Here
+
+.header-top{
+	background-color:#fff;
+	.inner-sec{
+		display:flex;
+		flex-wrap:wrap;
+		align-items:center;
+		padding:5px 0px;
+		border-bottom:1px solid #EDEDED;
+		ul{
+			margin:0px;
+			li{
+				list-style-type:none;
+				display:inline-block;
+			}
+			&.mobile-left{
+				li{
+					margin-right:7px;
+					font-family: 'quicksandmedium';
+					color:#484848;
+					img{
+						margin-right:10px;
+					}
+					&:nth-child(2){
+						text-decoration:underline;
+					}
+				}
+			}
+			&.social-right{
+				margin-left:auto;
+				li{
+					a{
+						text-decoration:none;
+						display:block;
+						text-align:center;
+						height:30px;
+						width:30px;
+						background-color:#E5E5E5;
+						border-radius:10px;
+					}
+				}
+			}
+		}
+	}
+} 
+.st-nav{
+	ul.navbar-nav{
+		li{
+			line-height: 20px;
+			a.nav-link{
+				padding-left:1rem;
+				padding-right:1rem;
+				font-size:16px;
+				color:#484848;
+				text-transform:capitalize;
+				@include transition($transition); 
+				&:hover,
+				&:focus{
+					color:$theme-color;
+				}
+				
+			}
+			&.active{
+				a.nav-link{
+					color:$theme-color;
+				}
+			}
+			&.login{
+				margin-left:10px;
+				margin-right:5px;
+				a{
+					padding-left:1.5rem;
+					padding-right:1.5rem;
+					background-color:$theme-color;
+					border-radius:50px;
+					font-family:$heading-family;
+					color:#fff;
+					&:hover,
+					&:focus{
+						color:#fff;
+					}
+				}
+			}
+			&.signup{
+				a{				
+					    padding-left: 1.5rem;
+						padding-right: 1.5rem;
+						background-color: #424242;
+						border-radius: 50px;
+						font-family: "Quicksand", sans-serif;
+						color: #fff;
+					&:hover,
+					&:focus{
+						color:#fff;
+					}
+				}
+				&.profile-pro{
+					line-height:0;
+					margin-top: -7px;
+					a {
+								background-color: transparent;
+								display: block;
+								width: 90px;
+							 img{
+								    width: 100%;
+									height: auto;
+									border-radius: 50%;
+							 }
+						}
+				}
+				
+			}
+			&.profile{
+				a{
+					padding:0px;
+					height:45px;
+					width:45px;
+					border-radius:50%;
+					overflow:hidden;
+					img{
+						height:100%;
+					}
+				}
+			}
+		}
+	}
+}

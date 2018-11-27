@@ -1,0 +1,9 @@
+[19-Jun-2018 12:54:59 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Price' not found in /home/gurpreet/public_html/nanny/app/Http/Controllers/GuestsController.php on line 158
+[19-Jun-2018 12:55:07 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Price' not found in /home/gurpreet/public_html/nanny/app/Http/Controllers/GuestsController.php on line 158
+[21-Jun-2018 05:31:33 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Admin\URL' not found in /home/gurpreet/public_html/nanny/app/Http/Controllers/Admin/NanniesController.php on line 486
+[21-Jun-2018 05:31:40 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Admin\URL' not found in /home/gurpreet/public_html/nanny/app/Http/Controllers/Admin/NanniesController.php on line 486
+[21-Jun-2018 08:50:26 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/gurpreet/public_html/nanny/storage/framework/views/983b1996fd240672dc7af8f220b1e3682c509518.php on line 86
+[21-Jun-2018 08:50:53 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Admin\Config' not found in /home/gurpreet/public_html/nanny/app/Http/Controllers/Admin/AdminRequestsController.php on line 130
+[25-Jun-2018 08:40:29 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Type' not found in /home/gurpreet/public_html/nanny/app/Http/Controllers/UsersController.php on line 345
+[25-Jun-2018 08:59:28 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/gurpreet/public_html/nanny/app/Http/Controllers/UsersController.php on line 889
+[28-Jun-2018 08:54:50 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/gurpreet/public_html/nanny/app/Http/Controllers/UsersController.php on line 241
